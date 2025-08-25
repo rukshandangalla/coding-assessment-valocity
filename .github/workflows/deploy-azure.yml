@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'blackjack-game-app'    # Set this to your Azure Web App name
-  AZURE_WEBAPP_PACKAGE_PATH: './publish'     # Set this to the path to your web app project
-  NODE_VERSION: '20.x'                       # Set this to the node version to use
-  DOTNET_VERSION: '8.0.x'                    # Set this to the .NET version to use
+  AZURE_WEBAPP_NAME: 'blackjack-game-app'
+  AZURE_WEBAPP_PACKAGE_PATH: './publish'     
+  NODE_VERSION: '20.x'                       
+  DOTNET_VERSION: '8.0.x'                    
 
 jobs:
   build-and-deploy:

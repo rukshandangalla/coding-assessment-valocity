@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\blackjackgame.client\blackjackgame.client.esproj">
+    <ProjectReference Include="blackjackgame.client\blackjackgame.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
