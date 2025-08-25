@@ -53,7 +53,7 @@ namespace Tests
         {
             // Arrange
             var birthingUnit = new BirthingUnit();
-            var person = new People("Alice");
+            var person = new Person("Alice");
             
             // Act
             var result = birthingUnit.GetMarried(person, "testing");
@@ -67,7 +67,7 @@ namespace Tests
         {
             // Arrange
             var birthingUnit = new BirthingUnit();
-            var person = new People("Bob");
+            var person = new Person("Bob");
             
             // Act
             var result = birthingUnit.GetMarried(person, "Smith");
@@ -77,32 +77,32 @@ namespace Tests
         }
 
         [Fact]
-        public void GetMarried_WithLongNames_ReturnsFullStringWithoutTruncation()
+        public void GetMarried_WithLongNames_NowReturnsTruncatedString()
         {
             // Arrange
             var birthingUnit = new BirthingUnit();
-            var person = new People(new string('A', 200));
+            var person = new Person(new string('A', 200));
             var lastName = new string('B', 100);
             
             // Act
             var result = birthingUnit.GetMarried(person, lastName);
             
-            // Assert - Captures bug: substring result is not returned
-            result.Should().Be(new string('A', 200) + " " + new string('B', 100));
-            result.Length.Should().BeGreaterThan(255, "because truncation logic doesn't return the result");
+            // Assert - Fixed: now returns truncated string
+            result.Length.Should().Be(255, "because names are truncated to 255 characters");
+            result.Should().StartWith(new string('A', 200) + " ");
         }
 
         [Fact]
-        public void GetPeople_RandomNameGeneration_HasBugInRandomRange()
+        public void GetPeople_RandomNameGeneration_NowGeneratesBothNames()
         {
-            // This test documents that Random.Next(0,1) only returns 0
-            // So it will ONLY generate "Bob", never "Betty"
+            // Fixed: Random.Next(0,2) now properly generates both names
             var birthingUnit = new BirthingUnit();
             
             var people = birthingUnit.GetPeople(100);
             
-            // This captures the bug - all names will be "Bob"
-            people.Should().OnlyContain(p => p.Name == "Bob");
+            // After fix: should have both Bob and Betty
+            people.Should().Contain(p => p.Name == "Bob");
+            people.Should().Contain(p => p.Name == "Betty");
         }
     }
 }
