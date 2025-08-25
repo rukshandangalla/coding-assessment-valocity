@@ -1,0 +1,140 @@
+.game-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.game-start {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.game-start h1 {
+  font-size: 3em;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.game-board {
+  background-color: #0f5132;
+  border-radius: 15px;
+  padding: 30px;
+  color: white;
+  min-height: 500px;
+}
+
+.dealer-section, .player-section {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.dealer-section h2, .player-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.5em;
+}
+
+.hand {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 15px 0;
+  min-height: 100px;
+}
+
+.hand-status {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #ffff00;
+  margin-top: 10px;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.btn-primary, .btn-action, .btn-secondary {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-action {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-action:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}
+
+.btn-primary:disabled, .btn-action:disabled, .btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result-message {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 10px;
+}
+
+.result-win {
+  background-color: #28a745;
+  color: white;
+}
+
+.result-lose {
+  background-color: #dc3545;
+  color: white;
+}
+
+.result-push {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+  margin: 20px 0;
+}
+
+.error-message {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  text-align: center;
+}

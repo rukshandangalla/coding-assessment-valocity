@@ -1,0 +1,6 @@
+<div class="card" [ngClass]="{'hidden': card?.isHidden}">
+  <div class="card-content" [style.color]="getCardColor()">
+    <div class="card-value">{{ getCardValue() }}</div>
+    <div class="card-suit">{{ getCardSymbol() }}</div>
+  </div>
+</div>
