@@ -8,9 +8,9 @@ import { GameState, ActionRequest, StartGameRequest } from '../models/game.model
   providedIn: 'root'
 })
 export class GameService {
-  private readonly baseUrl = 'http://localhost:5017/api/game';
+  private readonly baseUrl = 'https://blackjack-game-app.azurewebsites.net/api/game';
   private gameState = new BehaviorSubject<GameState | null>(null);
-  
+
   public gameState$ = this.gameState.asObservable();
 
   private httpOptions = {
