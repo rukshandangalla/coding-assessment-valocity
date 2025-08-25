@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace CodingAssessment.Refactor
 {
-    public class People
+    public class Person
     {
-        private static readonly DateTimeOffset Under16 = DateTimeOffset.UtcNow.AddYears(-15);
+        private static readonly DateTimeOffset DefaultAge = DateTimeOffset.UtcNow.AddYears(-16);  // Default age for a person
         public string Name { get; private set; }
         public DateTimeOffset DOB { get; private set; }
 
-        public People(string name) : this(name, Under16.Date)
+        public Person(string name) : this(name, DefaultAge.Date)
         {
         }
 
-        public People(string name, DateTime dob)
+        public Person(string name, DateTime dob)
         {
             Name = name;
             DOB = dob;
@@ -24,59 +24,61 @@ namespace CodingAssessment.Refactor
     public class BirthingUnit
     {
         /// <summary>
-        /// MaxItemsToRetrieve
+        /// List of generated people
         /// </summary>
-        private List<People> _people;
+        private List<Person> _people;
 
         public BirthingUnit()
         {
-            _people = new List<People>();
+            _people = new List<Person>();
         }
 
         /// <summary>
-        /// GetPeoples
+        /// Generate people and add to internal list
         /// </summary>
-        /// <param name="j"></param>
-        /// <returns>List<object></returns>
-        public List<People> GetPeople(int i)
+        /// <param name="i">Number of people to generate</param>
+        /// <returns>List of all people (including previously generated)</returns>
+        public List<Person> GetPeople(int i)
         {
             for (int j = 0; j < i; j++)
             {
                 try
                 {
-                    // Creates a dandon Name
+                    // Creates a random Name
                     string name = string.Empty;
                     var random = new Random();
-                    if (random.Next(0, 1) == 0) {
+                    if (random.Next(0, 2) == 0)
+                    {  // Fixed: was Next(0,1) which only returns 0
                         name = "Bob";
                     }
-                    else {
+                    else
+                    {
                         name = "Betty";
                     }
                     // Adds new people to the list
-                    _people.Add(new People(name, DateTime.UtcNow.Subtract(new TimeSpan(random.Next(18, 85) * 356, 0, 0, 0))));
+                    _people.Add(new Person(name, DateTime.UtcNow.Subtract(new TimeSpan(random.Next(18, 85) * 365, 0, 0, 0))));
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     // Dont think this should ever happen
-                    throw new Exception("Something failed in user creation");
+                    throw new Exception("Something failed in user creation", ex);
                 }
             }
             return _people;
         }
 
-        private IEnumerable<People> GetBobs(bool olderThan30)
+        private IEnumerable<Person> GetBobs(bool olderThan30)
         {
-            return olderThan30 ? _people.Where(x => x.Name == "Bob" && x.DOB >= DateTime.Now.Subtract(new TimeSpan(30 * 356, 0, 0, 0))) : _people.Where(x => x.Name == "Bob");
+            return olderThan30 ? _people.Where(x => x.Name == "Bob" && x.DOB < DateTime.Now.Subtract(new TimeSpan(30 * 365, 0, 0, 0))) : _people.Where(x => x.Name == "Bob");
         }
 
-        public string GetMarried(People p, string lastName)
+        public string GetMarried(Person p, string lastName)
         {
             if (lastName.Contains("test"))
                 return p.Name;
-            if ((p.Name.Length + lastName).Length > 255)
+            if ((p.Name.Length + lastName.Length) > 255)
             {
-                (p.Name + " " + lastName).Substring(0, 255);
+                return (p.Name + " " + lastName).Substring(0, 255);
             }
 
             return p.Name + " " + lastName;
