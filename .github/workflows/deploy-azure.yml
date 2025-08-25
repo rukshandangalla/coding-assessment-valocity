@@ -1,0 +1,66 @@
+name: Deploy to Azure Web App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: 'blackjack-game-app'
+  AZURE_WEBAPP_PACKAGE_PATH: './publish'     
+  NODE_VERSION: '20.x'                       
+  DOTNET_VERSION: '8.0.x'                    
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: BlackjackGame/blackjackgame.client/package-lock.json
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    - name: Install client dependencies
+      working-directory: BlackjackGame/blackjackgame.client
+      run: npm ci
+
+    - name: Build Angular client
+      working-directory: BlackjackGame/blackjackgame.client
+      run: |
+        ng build --configuration=production --output-path=../BlackjackGame.Server/wwwroot
+
+    - name: Run tests
+      run: |
+        dotnet test BlackjackGame/BlackjackGame.Tests --configuration Release --no-restore --verbosity normal
+
+    - name: Build .NET application
+      run: |
+        dotnet restore BlackjackGame/BlackjackGame.Server
+        dotnet build BlackjackGame/BlackjackGame.Server --configuration Release --no-restore
+
+    - name: Publish .NET application
+      run: |
+        dotnet publish BlackjackGame/BlackjackGame.Server --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

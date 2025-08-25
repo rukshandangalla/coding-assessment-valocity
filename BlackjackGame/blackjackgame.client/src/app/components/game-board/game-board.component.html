@@ -1,0 +1,84 @@
+<div class="game-container">
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="loading" *ngIf="isLoading">
+    Loading...
+  </div>
+
+  <!-- Game Start -->
+  <div class="game-start" *ngIf="!gameState">
+    <h1>Blackjack</h1>
+    <button class="btn-primary" (click)="startNewGame()" [disabled]="isLoading">
+      Start New Game
+    </button>
+  </div>
+
+  <!-- Game Board -->
+  <div class="game-board" *ngIf="gameState">
+    
+    <!-- Dealer Section -->
+    <div class="dealer-section">
+      <h2>Dealer ({{ gameState.dealerHand.value }})</h2>
+      <div class="hand">
+        <app-card *ngFor="let card of gameState.dealerHand.cards" [card]="card"></app-card>
+      </div>
+      <div class="hand-status" *ngIf="gameState.dealerHand.isBusted">
+        BUSTED!
+      </div>
+      <div class="hand-status" *ngIf="gameState.dealerHand.isBlackjack">
+        BLACKJACK!
+      </div>
+    </div>
+
+    <!-- Game Controls -->
+    <div class="game-controls">
+      <button class="btn-action" 
+              (click)="playerHit()" 
+              [disabled]="!gameState.canPlayerHit || isLoading"
+              *ngIf="gameState.canPlayerHit">
+        Hit
+      </button>
+      
+      <button class="btn-action" 
+              (click)="playerStand()" 
+              [disabled]="!gameState.canPlayerStand || isLoading"
+              *ngIf="gameState.canPlayerStand">
+        Stand
+      </button>
+
+      <button class="btn-secondary" 
+              (click)="resetGame()" 
+              [disabled]="isLoading">
+        New Hand
+      </button>
+
+      <button class="btn-secondary" 
+              (click)="startNewGame()" 
+              [disabled]="isLoading">
+        New Game
+      </button>
+    </div>
+
+    <!-- Result Message -->
+    <div class="result-message" [ngClass]="getResultClass()" *ngIf="gameState.isGameOver">
+      {{ gameState.resultMessage }}
+    </div>
+
+    <!-- Player Section -->
+    <div class="player-section">
+      <h2>Player ({{ gameState.playerHand.value }})</h2>
+      <div class="hand">
+        <app-card *ngFor="let card of gameState.playerHand.cards" [card]="card"></app-card>
+      </div>
+      <div class="hand-status" *ngIf="gameState.playerHand.isBusted">
+        BUSTED!
+      </div>
+      <div class="hand-status" *ngIf="gameState.playerHand.isBlackjack">
+        BLACKJACK!
+      </div>
+    </div>
+
+  </div>
+</div>
