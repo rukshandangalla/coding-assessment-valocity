@@ -1,0 +1,2 @@
+# This file ensures the wwwroot directory is tracked in git
+# Angular build output will be placed here during CI/CD
