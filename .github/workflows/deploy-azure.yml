@@ -43,7 +43,12 @@ jobs:
     - name: Build Angular client
       working-directory: BlackjackGame/blackjackgame.client
       run: |
-        ng build --configuration=production --output-path=../BlackjackGame.Server/wwwroot
+        ng build --configuration=production
+
+    - name: Copy client build to server wwwroot
+      run: |
+        mkdir -p BlackjackGame/BlackjackGame.Server/wwwroot
+        cp -r BlackjackGame/blackjackgame.client/dist/blackjackgame.client/browser/* BlackjackGame/BlackjackGame.Server/wwwroot/
 
     - name: Run tests
       run: |
@@ -56,7 +61,7 @@ jobs:
 
     - name: Publish .NET application
       run: |
-        dotnet publish BlackjackGame/BlackjackGame.Server --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        dotnet publish BlackjackGame/BlackjackGame.Server --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} /p:BuildSpa=false
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
