@@ -75,5 +75,34 @@ namespace Tests
             // Assert
             result.Should().Be("Bob Smith");
         }
+
+        [Fact]
+        public void GetMarried_WithLongNames_ReturnsFullStringWithoutTruncation()
+        {
+            // Arrange
+            var birthingUnit = new BirthingUnit();
+            var person = new People(new string('A', 200));
+            var lastName = new string('B', 100);
+            
+            // Act
+            var result = birthingUnit.GetMarried(person, lastName);
+            
+            // Assert - Captures bug: substring result is not returned
+            result.Should().Be(new string('A', 200) + " " + new string('B', 100));
+            result.Length.Should().BeGreaterThan(255, "because truncation logic doesn't return the result");
+        }
+
+        [Fact]
+        public void GetPeople_RandomNameGeneration_HasBugInRandomRange()
+        {
+            // This test documents that Random.Next(0,1) only returns 0
+            // So it will ONLY generate "Bob", never "Betty"
+            var birthingUnit = new BirthingUnit();
+            
+            var people = birthingUnit.GetPeople(100);
+            
+            // This captures the bug - all names will be "Bob"
+            people.Should().OnlyContain(p => p.Name == "Bob");
+        }
     }
 }
